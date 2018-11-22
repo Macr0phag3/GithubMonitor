@@ -133,7 +133,7 @@ class GithubMonitor:
                     r.alert("Github Monitor EEEOR: Something went wrong!\n\n"+err, admin_email)
                     raise  # 释放异常，强制停止脚本
 
-        print("[INFO] 结束关键字: "+keyword)
+        print("[INFO] 结束关键字: "+keyword+"\n\n")
 
     def analysis_result(self, items, keyword):
         '''
