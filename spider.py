@@ -107,8 +107,6 @@ class GithubMonitor:
                     print("[WARNING] 在第{}页退出".format(page_id))
                     break
 
-                page_id += 1
-
             except Exception as e:
                 err = str(e)
 
@@ -117,14 +115,12 @@ class GithubMonitor:
                     sleep_time = random.randint(20, 60)
                     print("[WARNING] Too fast! Sleep for {}s".format(sleep_time))
                     time.sleep(sleep_time)  # sleep 一会
+                    continue
 
                 elif "Read timed out" in err:
                     # 出现 timed out 则重复运行（page_id 不变）
                     print("[WARNING] Read data timed out! Just repeat it")  # 跳过 Not Found
-                    pass
-
-                elif "Not Found" in err:
-                    print("[WARNING] File not found! Just pass it")  # 跳过 Not Found
+                    continue
 
                 else:
                     # 其他错误则发邮件报告异常
@@ -132,6 +128,8 @@ class GithubMonitor:
                     print("[EEEOR] Something went wrong!\n" + err)  # 打印出来，以便在日志中看到
                     r.alert("Github Monitor EEEOR: Something went wrong!\n\n"+err, admin_email)
                     raise  # 释放异常，强制停止脚本
+
+            page_id += 1
 
         print("[INFO] 结束关键字: "+keyword+"\n\n")
 
@@ -192,9 +190,11 @@ class GithubMonitor:
                     sleep_time = random.randint(20, 60)
                     print("sleep for {}s".format(sleep_time))
                     time.sleep(sleep_time)
+                    continue
 
                 elif "Read timed out" in err:
                     print("timed out")  # timed out 则重复
+                    continue
 
                 elif "Not Found" in err:
                     print("File not found. Just pass it")  # 跳过 Not Found
