@@ -246,6 +246,9 @@ for keyword in keywords:
         else:
             results[keyword].append([(None, )*7+("∞",)])
 
+    if not results[keyword]:
+        results.pop(keyword)  # 不汇报无泄漏的关键字
+
 DB.conn.close()
 
 if send_flag:
