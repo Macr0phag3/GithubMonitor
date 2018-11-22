@@ -2,7 +2,6 @@
 
 import sqlite3
 import time
-import pprint
 
 
 class mysqlite:
