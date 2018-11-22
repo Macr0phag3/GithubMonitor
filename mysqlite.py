@@ -148,20 +148,3 @@ class mysqlite:
                 )
             )
         return result
-
-
-'''
-
-create table IF NOT EXISTS test(
-    url VARCHAR(100),
-    sha VARCHAR(40),
-    repository VARCHAR(100),
-    keyword VARCHAR(100),
-    filename VARCHAR(100),
-    level VARCHAR(5),
-    update_time VARCHAR(10),
-    PRIMARY KEY (url)
-);
-
-INSERT INTO test(url, sha, repository, keyword, filename, level, update_time) VALUES('{url}','{sha}','{repository}','{keyword}','{filename}','{level}','{update_time}')
-'''
