@@ -251,7 +251,8 @@ DB.conn.close()
 if send_flag:
     c = GenerateHTML(results)
 
-    r.alert(c, admin_email)
+    for email_addr in config["receiver_email"]:
+        r.alert(c, email_addr)
 
     with open(file_url+"result.html", 'w') as fp:
         fp.write(c)
