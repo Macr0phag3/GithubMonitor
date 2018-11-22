@@ -1,0 +1,77 @@
+<title>Github Leak Report</title>
+
+{% for keyword, value in results.items() %}
+    <h1>命中关键字：{{ keyword }}</h1>
+
+    <h2>新发现泄露(Level 3)</h2>
+    <table border="0" cellpadding="5" cellspacing="1" bgcolor="black">
+        <tr align="center" bgcolor="white">
+          <td>ID</td>
+          <td>File SHA</td>
+          <td>Code Location</td>
+          <td>Last Record Time</td>
+        </tr>
+
+        {% for item in value[0] %}
+          <tr align="center" bgcolor="white">
+              <td>{{ loop.index }}</td>
+              <td>{{ item[1] }}</td>
+              <td><a href={{ item[0] }}> {{ item[2] }} </a></td>
+              <td>{{ item[7] }}</a></td>
+          </tr>
+        {% endfor %}
+    </table>
+
+    <h2>更新泄露(Level 2)</h2>
+    <table border="0" cellpadding="5" cellspacing="1" bgcolor="black">
+      <tr align="center" bgcolor="white">
+          <td>ID</td>
+          <td>File SHA</td>
+          <td>Code Location</td>
+          <td>Last Record Time</td>
+      </tr>
+
+      {% for item in value[1] %}
+      <tr align="center" bgcolor="white">
+          <td>{{ loop.index }}</td>
+          <td>{{ item[1] }}</td>
+          <td><a href={{ item[0] }}> {{ item[2] }} </a></td>
+          <td>{{ item[7] }}</a></td>
+      </tr>
+      {% endfor %}
+    </table>
+
+    <h2>疑似误报(Level 1)</h2>
+    <table border="0" cellpadding="5" cellspacing="1" bgcolor="black">
+      <tr align="center" bgcolor="white">
+          <td>ID</td>
+          <td>File SHA</td>
+          <td>Code Location</td>
+          <td>Last Record Time</td>
+      </tr>
+
+      {% for item in value[2] %}
+      <tr align="center" bgcolor="white">
+          <td>{{ loop.index }}</td>
+          <td>{{ item[1] }}</td>
+          <td><a href={{ item[0] }}> {{ item[2] }} </a></td>
+          <td>{{ item[7] }}</a></td>
+      </tr>
+      {% endfor %}
+    </table>
+
+    <br>
+    <hr size=3 noshade/>
+
+{% endfor %}
+
+<!--
+0: url
+1: sha
+2: repository
+3: keyword
+4: filename
+5: level
+6: update_time
+7: last_record_time
+-->
