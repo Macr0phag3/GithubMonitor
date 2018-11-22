@@ -2,3 +2,4 @@ config.json
 result.html
 github
 __pycache__/
+*.pyc
