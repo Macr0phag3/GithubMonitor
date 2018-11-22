@@ -238,16 +238,18 @@ send_flag = 0  # 为 0 时说明 3 个 level 均为空
 results = {}
 for keyword in keywords:
     results[keyword] = []
+    empty = True
     for level in range(3, 0, -1):
         result = DB.Get_Date(keyword, level)
         if result:
             send_flag = 1
             results[keyword].append(result)
+            empty = False
         else:
             results[keyword].append([(None, )*7+("∞",)])
 
-    if not results[keyword]:
-        results.pop(keyword)  # 不汇报无泄漏的关键字
+    if empty:  # 不汇报无泄漏的关键字
+        results.pop(keyword)
 
 DB.conn.close()
 
