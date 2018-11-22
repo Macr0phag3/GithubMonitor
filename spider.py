@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
 # running by py3.x
-from github import Github  # pip install PyGithub
-import random
+
 import time
-import traceback
-from jinja2 import Template  # pip install jinja2
-import mysqlite
 import json
+import random
+import mysqlite
+import traceback
+
 from reporter import Reporter
+from github import Github  # pip install PyGithub
+from jinja2 import Template  # pip install jinja2
 
 
 def GenerateKeywords(hosts):
