@@ -16,7 +16,6 @@ class mysqlite:
         创建数据库
         '''
 
-        # print ("open database success")
         query = """create table IF NOT EXISTS {tablename}(
             url VARCHAR(100),
             sha VARCHAR(40),
@@ -30,7 +29,6 @@ class mysqlite:
         );""".format(tablename=self.tablename)  # 不存在才新建
         self.conn.execute(query)
         self.conn.commit()
-        # print ("tablename created successfully")
 
     def Record(self, url, sha, repository, filename, keyword, update_time, negative):
         result = self.Select(
