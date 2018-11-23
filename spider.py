@@ -284,4 +284,39 @@ if send_flag:  # 为 0 时说明 所有关键字都无泄漏
 '''
 results 示例：
 
+{'qiniu 密码': [('www.github.com/nicoson/CNR-Video-Audit/blob/master/README.md',
+   '0f00caf3b2bc2828428b568148b1939bdce5f6c6',
+   'nicoson/CNR-Video-Audit',
+   'qiniu 密码',
+   'README.md',
+   '3',
+   '1542811078',
+   '∞'),
+
+  ('www.github.com/Macr0phag3/github_monitor/blob/master/template.html',
+   'e7e35a1fd081e31675a2644fbe91d56356f5e74d',
+   'Macr0phag3/github_monitor',
+   'qiniu 密码',
+   'template.html',
+   '3',
+   '1542811744',
+   '∞'),
+
+  ('www.github.com/Macr0phag3/github_monitor/blob/master/spider.py',
+   '2b3fd456e58eb5dc0ee6d72b98a9494f7dda9423',
+   'Macr0phag3/github_monitor',
+   'qiniu 密码',
+   'spider.py',
+   '2',
+   '1542811745',
+   '∞'),
+
+  ('www.github.com/shuaizhupeiqi/shuaizhupeiqi.github.io/blob/master/page/2/index.html',
+   '413fc90095643fa9e0acc0e5bdb8a6d7c116fc3a',
+   'shuaizhupeiqi/shuaizhupeiqi.github.io',
+   'qiniu 密码',
+   'page/2/index.html',
+   '2',
+   '1542811520',
+   '∞')]}
 '''
