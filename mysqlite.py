@@ -6,7 +6,7 @@ import sqlite3
 import time
 
 
-def _get_hour(self):
+def _get_hour():
     '''
     返回上个小时的时间戳
     假如现在是 2018.11.21 19:44:02， 那么返回 '1542794400'
