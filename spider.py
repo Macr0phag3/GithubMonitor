@@ -280,3 +280,8 @@ if send_flag:  # 为 0 时说明 所有关键字都无泄漏
 
     with open(file_url+"result.html", 'w') as fp:
         fp.write(c)
+
+'''
+results 示例：
+
+'''
