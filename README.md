@@ -1,6 +1,8 @@
 # github_monitor
 
-监控 git 泄漏。
+根据关键字与 hosts 生成的关键词，利用 github 提供的 api，监控 git 泄漏。
+
+有对应的泄漏定级。
 
 **注释很详细**
 
