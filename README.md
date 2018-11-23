@@ -6,6 +6,15 @@
 
 **注释很详细**
 
+## 依赖
+- pip install PyGithub
+- pip install jinja2
+
+## 运行方式
+- crontab 一个小时一次
+- python spider.py
+
+
 ## 代码主要逻辑
 ![代码主要逻辑](https://github.com/Macr0phag3/GithubMonitor/raw/master/pics/pic2.jpg)
 
