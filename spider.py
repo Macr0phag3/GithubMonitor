@@ -226,7 +226,7 @@ class GithubMonitor:
 
 # --------------------- 可能需要修改 ----------------------
 file_url = "./"
-DB = mysqlite.mysqlite(file_url+"github", "leak")
+DB = mysqlite.MySqlite(file_url+"github", "leak")
 # -------------------------------------------------------
 
 # 读取配置

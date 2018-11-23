@@ -22,7 +22,7 @@ def _get_hour(self):
     )-3600)
 
 
-class mysqlite:
+class MySqlite:
     def __init__(self, dbname, tablename):
         '''
         初始化
