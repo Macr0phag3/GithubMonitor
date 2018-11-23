@@ -10,24 +10,7 @@ class Reporter:
         self.smtp_port = smtp_port
         self.email_username = email_username
         self.email_password = email_password
-        # TODO remove
         self.sent_emails_counter = 0
-
-    def alert(self, content, email_to_string):
-
-        # create email
-        email = MIMEMultipart('alternative')
-        # TODO calculate this value.
-        email['Subject'] = "Github Monitor"
-        email['From'] = self.email_from
-        # email_to = email_to_string.split(',')
-        email['To'] = email_to_string
-        # part_text = MIMEText(text_version, 'plain', 'utf-8')
-        # email.attach(part_text)
-        part_html = MIMEText(content, 'html', 'utf-8')
-        email.attach(part_html)
-
-        self._send_email(email, email_to_string)
 
     def _send_email(self, email, email_to_string):
         mail_server = smtplib.SMTP(host=self.smtp_server, port=self.smtp_port)
@@ -40,3 +23,13 @@ class Reporter:
             self.sent_emails_counter += 1
         finally:
             mail_server.close()
+
+    def alert(self, content, email_to_string):
+        email = MIMEMultipart('alternative')
+        email['Subject'] = "Github Monitor"
+        email['From'] = self.email_from
+        email['To'] = email_to_string
+        part_html = MIMEText(content, 'html', 'utf-8')
+        email.attach(part_html)
+
+        self._send_email(email, email_to_string)
