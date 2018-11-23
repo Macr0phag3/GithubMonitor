@@ -16,12 +16,12 @@ def _get_hour():
         字符串；上个小时的时间戳
     '''
 
-    return str(int(
+    return int(
         time.mktime(
             time.strptime(
                 time.strftime("%Y-%m-%d %H"), "%Y-%m-%d %H")
         )
-    )-3600)
+    )-3600
 
 
 class MySqlite:
@@ -195,7 +195,7 @@ class MySqlite:
         '''
 
         last_hour_time = _get_hour()
-        result = self._select('''SELECT * FROM {tablename} where keyword='{keyword}' and update_time>='{last_hour_time}' and update_time<'{now_hour_time}' and level={level};
+        result = self._select('''SELECT * FROM {tablename} where keyword='{keyword}' and update_time>='{last_hour_time}' and update_time<'{now_hour_time}' and level='{level}';
         '''.format(
             tablename=self.tablename,
             keyword=keyword,
