@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+# 2018.11.23 11:07:22 by Tr0y
+
 import sqlite3
 import time
 

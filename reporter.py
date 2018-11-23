@@ -1,3 +1,7 @@
+# -*- coding: utf-8 -*-
+
+# 2018.11.23 11:07:07 by nobody
+
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import smtplib
