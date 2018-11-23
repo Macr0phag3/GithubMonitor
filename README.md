@@ -13,6 +13,8 @@
 ## 运行方式
 - crontab 一个小时一次
 - python spider.py
+- 新建一个 `config.json` 文件，按照 `spider.py` 里的注释配置
+- `spider.py` 中的 `file_url` 可能需要修改
 
 
 ## 代码主要逻辑
