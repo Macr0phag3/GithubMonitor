@@ -229,14 +229,17 @@ file_url = "./"
 DB = mysqlite.mysqlite(file_url+"github", "leak")
 # -------------------------------------------------------
 
+# 读取配置
+# 将配置放在单独的 json 文件中
+# 再设置 .gitgnore 防止泄露
 with open(file_url+"config.json", "r") as fp:
     config = json.load(fp)
 
-hosts = config["hosts"]
+hosts = config["hosts"]  # 监控的 host
 
-admin_email = config["admin_email"]
+admin_email = config["admin_email"]  # 管理员邮箱（报错的时候通知）
 
-token = config["token"]
+token = config["token"]  # Github token
 r = Reporter(
     config["sender_email"]["uname"],
     config["sender_email"]["smtp"],
@@ -250,13 +253,13 @@ keywords = GenerateKeywords(hosts)
 Monitor = GithubMonitor(keywords, token)
 results = Monitor.search()
 
-send_flag = 0  # 为 0 时说明 3 个 level 均为空
+send_flag = 0
 results = {}
 for keyword in keywords:
     results[keyword] = []
     empty = True
     for level in range(3, 0, -1):
-        result = DB.Get_Date(keyword, level)
+        result = DB.Get_Data(keyword, level)  # 获取上一轮的泄漏记录
         if result:
             send_flag = 1
             results[keyword].append(result)
@@ -269,7 +272,7 @@ for keyword in keywords:
 
 DB.conn.close()
 
-if send_flag:
+if send_flag:  # 为 0 时说明 所有关键字都无泄漏
     c = GenerateHTML(results)
 
     for email_addr in config["receiver_email"]:

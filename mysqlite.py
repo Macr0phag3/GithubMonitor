@@ -128,7 +128,7 @@ class mysqlite:
             )
         )-3600)
 
-    def Get_Date(self, keyword, level):
+    def Get_Data(self, keyword, level):
         result = self.Select('''SELECT * FROM {tablename} where keyword='{keyword}' and update_time>='{update_time}' and level={level};
         '''.format(
             tablename=self.tablename,
