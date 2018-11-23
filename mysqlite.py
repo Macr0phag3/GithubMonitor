@@ -4,6 +4,24 @@ import sqlite3
 import time
 
 
+def _get_hour(self):
+    '''
+    返回上个小时的时间戳
+    假如现在是 2018.11.21 19:44:02， 那么返回 '1542794400'
+    即 2018.11.21 18:00:00 的时间戳
+
+    返回值：
+        字符串；上个小时的时间戳
+    '''
+
+    return str(int(
+        time.mktime(
+            time.strptime(
+                time.strftime("%Y-%m-%d %H"), "%Y-%m-%d %H")
+        )
+    )-3600)
+
+
 class mysqlite:
     def __init__(self, dbname, tablename):
         '''
@@ -19,9 +37,9 @@ class mysqlite:
 
         self.conn = sqlite3.connect(self.dbname)
 
-        self.Create()
+        self._create()
 
-    def Create(self):  #
+    def _create(self):  #
         '''
         若数据库不存在，则创建数据库
         '''
@@ -38,6 +56,84 @@ class mysqlite:
             PRIMARY KEY (url, sha)
         );""".format(tablename=self.tablename)  # 不存在才新建
         self.conn.execute(query)
+        self.conn.commit()
+
+    def _select(self, sql):
+        '''
+        查询
+
+        参数：
+            sql：字符串；查询的语句
+
+        返回值：
+            rows：2 维列表；查询的结果
+        '''
+
+        result = self.conn.execute(sql)
+        self.conn.commit()
+        rows = result.fetchall()
+        return rows  # [(, ... ,), (, ... ,)]
+
+    def _insert(self, url, sha, repository, filename, keyword, level, update_time):
+        '''
+        插入数据
+        column 顺序与参数顺序一致
+        **插入的数据类型均为字符串**
+
+        参数：
+            url：        字符串；代码文件的 url
+            sha：        字符串；代码文件的 sha
+            repository： 字符串；代码文件的仓库
+            filename：   字符串；代码文件的文件名
+            keyword：    字符串；代码文件命中的关键字
+            level：      整数；  泄露级别
+            update_time：字符串；数据库中此记录被更新的时间
+        '''
+
+        data = '''INSERT INTO {tablename}(url, sha, repository, keyword, filename, level, update_time, last_record_time) VALUES('{url}','{sha}','{repository}','{keyword}','{filename}','{level}','{update_time}', '∞');
+        '''.format(
+            tablename=self.tablename,
+            url=url,
+            sha=sha,
+            repository=repository,
+            keyword=keyword,
+            filename=filename,
+            level=level,
+            update_time=update_time
+        )
+
+        self.conn.execute(data)
+        self.conn.commit()
+
+    def _update(self, url, sha, repository, filename, keyword, level, update_time, last_record_time):
+        '''
+        更新数据
+
+        参数：
+            url：             字符串；代码文件的 url
+            sha：             字符串；代码文件的 sha
+            repository：      字符串；代码文件的仓库
+            filename：        字符串；代码文件的文件名
+            keyword：         字符串；代码文件命中的关键字
+            level：           整数；  泄露级别
+            update_time：     字符串；数据库中此记录被更新的时间
+            last_record_time：字符串；数据库中此记录上一次被更新的时间
+        '''
+
+        data = '''UPDATE {tablename} SET url='{url}', sha='{sha}', repository='{repository}', keyword='{keyword}', filename='{filename}', level='{level}', update_time='{update_time}', last_record_time='{last_record_time}' where url='{url}';
+        '''.format(
+            tablename=self.tablename,
+            url=url,
+            sha=sha,
+            repository=repository,
+            keyword=keyword,
+            filename=filename,
+            level=level,
+            update_time=update_time,
+            last_record_time=last_record_time
+        )
+
+        self.conn.execute(data)
         self.conn.commit()
 
     def Record(self, url, sha, repository, filename, keyword, update_time, negative):
@@ -57,7 +153,7 @@ class mysqlite:
             level：整数；泄露级别
         '''
 
-        result = self.Select(
+        result = self._select(
             '''SELECT url, sha, update_time FROM {tablename} where url='{url}'; '''.format(
                 url=url,
                 tablename=self.tablename
@@ -71,7 +167,7 @@ class mysqlite:
                     level = 2
 
                 # 旧的 update_time 作为新的 last_record_time
-                self.Update(url, sha, repository, filename, keyword, level, update_time, result[0][2])
+                self._update(url, sha, repository, filename, keyword, level, update_time, result[0][2])
             else:
                 level = 0
         else:
@@ -80,87 +176,28 @@ class mysqlite:
             else:
                 level = 3
 
-            self.Insert(url, sha, repository, filename, keyword, level, update_time)
+            self._insert(url, sha, repository, filename, keyword, level, update_time)
 
         return level
 
-    def Select(self, sql):
-        '''
-        查询
-
-        默认查询所有 column
-        '''
-
-        result = self.conn.execute(sql)
-        self.conn.commit()
-        rows = result.fetchall()
-        return rows
-
-    def Insert(self, url, sha, repository, filename, keyword, level, update_time):
-        '''
-        插入数据
-
-        column 顺序与参数顺序一致
-        '''
-
-        data = '''INSERT INTO {tablename}(url, sha, repository, keyword, filename, level, update_time, last_record_time) VALUES('{url}','{sha}','{repository}','{keyword}','{filename}','{level}','{update_time}', '∞');
-        '''.format(
-            tablename=self.tablename,
-            url=url,
-            sha=sha,
-            repository=repository,
-            keyword=keyword,
-            filename=filename,
-            level=level,
-            update_time=update_time
-        )
-
-        self.conn.execute(data)
-        self.conn.commit()
-
-    def Update(self, url, sha, repository, filename, keyword, level, update_time, last_record_time):
-        '''
-        更新数据
-        '''
-
-        data = '''UPDATE {tablename} SET url='{url}', sha='{sha}', repository='{repository}', keyword='{keyword}', filename='{filename}', level='{level}', update_time='{update_time}', last_record_time='{last_record_time}' where url='{url}';
-        '''.format(
-            tablename=self.tablename,
-            url=url,
-            sha=sha,
-            repository=repository,
-            keyword=keyword,
-            filename=filename,
-            level=level,
-            update_time=update_time,
-            last_record_time=last_record_time
-        )
-
-        self.conn.execute(data)
-        self.conn.commit()
-
-    def get_hour(self):
-        '''
-        返回上个小时的时间戳
-
-        假如现在是 2018.11.21 19:44:02， 那么返回 '1542794400'
-        即 2018.11.21 18:00:00 的时间戳
-        '''
-
-        return str(int(
-            time.mktime(
-                time.strptime(
-                    time.strftime("%Y-%m-%d %H"), "%Y-%m-%d %H")
-            )
-        )-3600)
-
     def Get_Data(self, keyword, level):
-        result = self.Select('''SELECT * FROM {tablename} where keyword='{keyword}' and update_time>='{update_time}' and level={level};
+        '''
+        获取上一轮的泄露记录
+
+        参数：
+            keyword：字符串；关键字
+            level：字符串；泄露级别
+
+        返回值：
+            result：2 维列表；泄露记录
+        '''
+
+        result = self._select('''SELECT * FROM {tablename} where keyword='{keyword}' and update_time>='{update_time}' and level={level};
         '''.format(
             tablename=self.tablename,
             keyword=keyword,
             level=level,
-            update_time=self.get_hour(),
+            update_time=_get_hour(),
         ))
 
         for i, r in enumerate(result):
@@ -170,4 +207,5 @@ class mysqlite:
                     int(r[-1])
                 )
             )
+
         return result
