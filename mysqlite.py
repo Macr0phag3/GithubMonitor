@@ -194,12 +194,14 @@ class MySqlite:
             result：2 维列表；泄露记录
         '''
 
-        result = self._select('''SELECT * FROM {tablename} where keyword='{keyword}' and update_time>='{update_time}' and level={level};
+        last_hour_time = _get_hour()
+        result = self._select('''SELECT * FROM {tablename} where keyword='{keyword}' and update_time>='{last_hour_time}' and update_time<'{now_hour_time}' and level={level};
         '''.format(
             tablename=self.tablename,
             keyword=keyword,
             level=level,
-            update_time=_get_hour(),
+            last_hour_time=last_hour_time,
+            now_hour_time=last_hour_time+3600  # 加个小于当前小时的限制，防止此轮刚更新就报告
         ))
 
         for i, r in enumerate(result):
