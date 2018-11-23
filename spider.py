@@ -83,21 +83,7 @@ class GithubMonitor:
 
         self.github = Github(self.token)
 
-    def search(self):
-        '''
-        根据关键字搜索 Github 上的代码
-        '''
-
-        for keyword in self.keywords:
-            result = self.github.search_code(
-                keyword,  # 关键字
-                sort="indexed",  # 按最新的索引记录排序
-                order="desc",  # 最新的索引放在最前面
-            )
-
-            self.analysis_page(result, keyword)
-
-    def analysis_page(self, result, keyword):
+    def _analysis_page(self, result, keyword):
         '''
         处理搜索页面
 
@@ -113,7 +99,7 @@ class GithubMonitor:
         while page_id < 34:
             try:
                 items = result.get_page(page_id)  # 获取页面的详细记录
-                ana_result = self.analysis_result(items, keyword)
+                ana_result = self._analysis_result(items, keyword)
                 if ana_result == False:
                     print("[WARNING] 连续 30 条数据都没有更新")
                     print("[WARNING] 在第{}页退出".format(page_id))
@@ -150,7 +136,7 @@ class GithubMonitor:
 
         print("[INFO] 结束关键字: "+keyword+"\n\n")
 
-    def analysis_result(self, items, keyword):
+    def _analysis_result(self, items, keyword):
         '''
         分析搜索页面
         '''
@@ -222,6 +208,20 @@ class GithubMonitor:
             result_id += 1
 
         return True
+
+    def search(self):
+        '''
+        根据关键字搜索 Github 上的代码
+        '''
+
+        for keyword in self.keywords:
+            result = self.github.search_code(
+                keyword,  # 关键字
+                sort="indexed",  # 按最新的索引记录排序
+                order="desc",  # 最新的索引放在最前面
+            )
+
+            self._analysis_page(result, keyword)
 
 
 # --------------------- 可能需要修改 ----------------------
