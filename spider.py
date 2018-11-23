@@ -22,6 +22,11 @@ def GenerateKeywords(hosts):
         www.baidu.com
         或者
         www.baidu.com @
+
+    参数：
+        hosts：列表；监控的域名
+    返回值：
+        keywords：列表；生成的关键字
     '''
 
     key = ["password", "passwd", "密码"]
@@ -102,6 +107,7 @@ class GithubMonitor:
         '''
 
         page_id = 0
+
         # 0-33 页，每页 30 个结果
         # 对应 github 的 1000 个结果的限制
         while page_id < 34:
@@ -146,13 +152,12 @@ class GithubMonitor:
 
     def analysis_result(self, items, keyword):
         '''
-        分析结果
+        分析搜索页面
         '''
 
         result_id = 0
 
         result_count = len(items)
-
         if not result_count:  # 结果为空
             return None
 
@@ -167,7 +172,7 @@ class GithubMonitor:
                 url = "https://www.github.com/"+item.repository.full_name+"/blob/master/"+item.path
 
                 update_time = str(int(time.time()))
-                record_result = DB.Record(
+                record_result = DB.Record(  # 扔给 Record 处理
                     url,
                     item.sha,
                     item.repository.full_name,  # repository
