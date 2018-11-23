@@ -6,14 +6,24 @@ import time
 
 class mysqlite:
     def __init__(self, dbname, tablename):
+        '''
+        初始化
+
+        参数：
+            dbname：字符串；数据库名
+            tablename：字符串；表名
+        '''
+
         self.dbname = dbname
-        self.conn = sqlite3.connect(self.dbname)
         self.tablename = tablename
+
+        self.conn = sqlite3.connect(self.dbname)
+
         self.Create()
 
     def Create(self):  #
         '''
-        创建数据库
+        若数据库不存在，则创建数据库
         '''
 
         query = """create table IF NOT EXISTS {tablename}(
@@ -31,11 +41,27 @@ class mysqlite:
         self.conn.commit()
 
     def Record(self, url, sha, repository, filename, keyword, update_time, negative):
+        '''
+        根据数据库情况，判断新数据记录方式
+
+        参数：
+            url：        字符串；代码文件的 url
+            sha：        字符串；代码文件的 sha
+            repository： 字符串；代码文件的仓库
+            filename：   字符串；代码文件的文件名
+            keyword：    字符串；代码文件命中的关键字
+            update_time：字符串；数据库中此记录被更新的时间
+            negative：   布尔值；是否为误报
+
+        返回值
+            level：整数；泄露级别
+        '''
+
         result = self.Select(
             '''SELECT url, sha, update_time FROM {tablename} where url='{url}'; '''.format(
                 url=url,
                 tablename=self.tablename
-            ))
+            ))  # 查询是否存在此 url 的记录
 
         if result:  # 已存在
             if result[0][1] != sha:  # 文件 sha 发生变化
@@ -44,7 +70,7 @@ class mysqlite:
                 else:
                     level = 2
 
-                # 旧的 update_time 作为更新后的 last_record_time
+                # 旧的 update_time 作为新的 last_record_time
                 self.Update(url, sha, repository, filename, keyword, level, update_time, result[0][2])
             else:
                 level = 0
