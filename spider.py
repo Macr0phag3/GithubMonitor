@@ -13,8 +13,20 @@ from jinja2 import Template  # pip install jinja2
 
 
 def GenerateKeywords(hosts):
+    '''
+    hosts * key
+    n*n 种组合的关键字
+    其中 host 带 @ 的还要加上 smtp 关键字
+
+    host 的格式为：
+        www.baidu.com
+        或者
+        www.baidu.com @
+    '''
+
     key = ["password", "passwd", "密码"]
     keywords = []
+
     for h in hosts:
         if "@" in h:
             h = h.split("@")[0]+" smtp"
@@ -62,8 +74,7 @@ class GithubMonitor:
         self.keywords = keywords
         self.token = token
 
-        self.results = {}
-        self.no_update = 0  # 连续旧数据的记录数
+        self.no_update = 0  # 连续旧记录的数量
 
         self.github = Github(self.token)
 
