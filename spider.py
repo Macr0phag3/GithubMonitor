@@ -122,7 +122,7 @@ class GithubMonitor:
                     time.sleep(sleep_time)  # sleep 一会
                     continue
 
-                elif "Read timed out" in err:
+                elif "timed out" in err:
                     # 出现 timed out 则重复运行（page_id 不变）
                     print("[WARNING] Read data timed out! Just repeat it")  # 跳过 Not Found
                     continue
@@ -200,7 +200,7 @@ class GithubMonitor:
                     time.sleep(sleep_time)
                     continue
 
-                elif "Read timed out" in err:
+                elif "timed out" in err:
                     print("timed out")  # timed out 则重复
                     continue
 
