@@ -134,8 +134,8 @@ class GithubMonitor:
                 else:
                     # 其他错误则发邮件报告异常
                     err = traceback.format_exc()
-                    print("[EEEOR] Something went wrong!\n" + err)  # 打印出来，以便在日志中看到
-                    r.alert("Github Monitor EEEOR: Something went wrong!\n\n"+err, admin_email)
+                    print("[ERROR] Something went wrong!\n" + err)  # 打印出来，以便在日志中看到
+                    r.alert("Github Monitor ERROR: Something went wrong!\n\n"+err, admin_email)
                     raise  # 释放异常，强制停止脚本
 
             page_id += 1
