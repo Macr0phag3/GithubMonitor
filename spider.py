@@ -131,6 +131,10 @@ class GithubMonitor:
                     print("[WARNING] Remote end closed connection without response! Just repeat it")  # Connection aborted 则重复
                     continue
 
+                elif "Unexpected problem" in err:
+                    print("[WARNING] Unexpected problem! Just repeat it")
+                    continue
+
                 else:
                     # 其他错误则发邮件报告异常
                     err = traceback.format_exc()
@@ -202,6 +206,10 @@ class GithubMonitor:
 
                 elif "timed out" in err:
                     print("timed out")  # timed out 则重复
+                    continue
+
+                elif "Unexpected problem" in err:
+                    print("[WARNING] Unexpected problem! Just repeat it")
                     continue
 
                 elif "Connection aborted." in err:
