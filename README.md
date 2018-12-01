@@ -6,6 +6,33 @@
 
 **注释很详细**
 
+config.json 的示例：
+```
+{
+  "hosts" : [
+    "*********.com",
+    "*********.com @",
+],
+
+"sender_email":{
+  "uname":"*********@qq.com",
+  "smtp":"smtp.qq.com",
+  "port":25,
+  "passwd":"*********"
+},
+
+"receiver_email":[
+  "*********@qq.com",
+  "*********@qq.com"
+],
+
+"token":"*******************",
+"admin_email":"*********@qq.com"
+}
+```
+
+hosts 中，带 `@` 的说明是邮件类型，在代码中会进行特殊处理，详细解释看代码
+
 ## 依赖
 - pip install PyGithub
 - pip install jinja2
