@@ -3,15 +3,16 @@
 # running by py3.x
 # 2018.11.23 11:07:22 by Tr0y
 
-import time
 import json
 import random
-import mysqlite
+import time
 import traceback
 
-from reporter import Reporter
 from github import Github  # pip install PyGithub
 from jinja2 import Template  # pip install jinja2
+
+import mysqlite
+from reporter import Reporter
 
 
 def GenerateKeywords(hosts):
@@ -102,12 +103,12 @@ class GithubMonitor:
             try:
                 items = result.get_page(page_id)  # 获取页面的详细记录
                 ana_result = self._analysis_result(items, keyword)
-                if ana_result == False:
+                if not ana_result:
                     print("[WARNING] 连续 30 条数据都没有更新")
                     print("[WARNING] 在第{}页退出".format(page_id))
                     break
 
-                elif ana_result == None:
+                elif ana_result is None:
                     print("[WARNING] 搜索页面为空")
                     print("[WARNING] 在第{}页退出".format(page_id))
                     break
@@ -269,7 +270,7 @@ r = Reporter(
 keywords = GenerateKeywords(hosts)
 
 Monitor = GithubMonitor(keywords, token)
-results = Monitor.search()
+Monitor.search()
 
 send_flag = 0
 results = {}
