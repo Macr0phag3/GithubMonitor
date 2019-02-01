@@ -292,6 +292,7 @@ for keyword in keywords:
 DB.conn.close()
 
 if send_flag:  # 为 0 时说明 所有关键字都无泄漏
+    print("[Info] Send email")
     c = GenerateHTML(results)
 
     for email_addr in config["receiver_email"]:
@@ -299,6 +300,8 @@ if send_flag:  # 为 0 时说明 所有关键字都无泄漏
 
     with open(file_url+"result.html", 'w') as fp:
         fp.write(c)
+else:
+    print("[Info] Nothing to do")
 
 '''
 results 示例：
