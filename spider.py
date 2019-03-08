@@ -123,7 +123,7 @@ class GithubMonitor:
                     time.sleep(sleep_time)  # sleep 一会
                     continue
 
-                elif "time out" in err:
+                elif "timed out" in err:
                     # 出现 time out 则重复运行（page_id 不变）
                     print("[WARNING] Read data time out! Just repeat it")
                     continue
@@ -214,7 +214,7 @@ class GithubMonitor:
                     time.sleep(sleep_time)
                     continue
 
-                elif "time out" in err:
+                elif "timed out" in err:
                     print("[WARNING] Read data time out! Just repeat it")
                     continue
 
@@ -229,12 +229,13 @@ class GithubMonitor:
                 elif "Connection aborted." in err:
                     # Connection aborted 则重复
                     print(
-                        "[WARNING] Remote end closed connection without response! Just repeat it")
+                        "[WARNING] Remote end closed connection without response! Just repeat it"
+                    )
                     continue
 
                 elif "Not Found" in err:
                     # 跳过 Not Found
-                    print("[WARNING] File not found! Just pass it")  
+                    print("[WARNING] File not found! Just pass it")
 
                 else:
                     # 出现其他错误的时候扔给 analysis_page() 中的异常检测处理
