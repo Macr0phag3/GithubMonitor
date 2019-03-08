@@ -37,10 +37,10 @@ def GenerateKeywords(hosts):
 
     for h in hosts:
         if "@" in h:
-            h = h.split("@")[0]+" smtp"
+            h = h.split("@")[0] + " smtp"
 
         for k in key:
-            keywords.append(h+" "+k)
+            keywords.append(h + " " + k)
 
     return keywords
 
@@ -56,7 +56,7 @@ def GenerateHTML(results):
         c：字符串；生成的 HTML 源码
     '''
 
-    with open(file_url+"template.html", "r") as fp:
+    with open(file_url + "template.html", "r") as fp:
         template = Template(fp.read())
         c = template.render(
             results=results,
@@ -125,11 +125,18 @@ class GithubMonitor:
 
                 elif "timed out" in err:
                     # 出现 timed out 则重复运行（page_id 不变）
-                    print("[WARNING] Read data timed out! Just repeat it")  # 跳过 Not Found
+                    # 跳过 Not Found
+                    print("[WARNING] Read data timed out! Just repeat it")
+                    continue
+
+                elif "Server Error" in err:
+                    print("[WARNING] Github Server Error! Just repeat it")
                     continue
 
                 elif "Connection aborted." in err:
-                    print("[WARNING] Remote end closed connection without response! Just repeat it")  # Connection aborted 则重复
+                    # Connection aborted 则重复
+                    print(
+                        "[WARNING] Remote end closed connection without response! Just repeat it")
                     continue
 
                 elif "Unexpected problem" in err:
@@ -139,13 +146,15 @@ class GithubMonitor:
                 else:
                     # 其他错误则发邮件报告异常
                     err = traceback.format_exc()
-                    print("[ERROR] Something went wrong!\n" + err)  # 打印出来，以便在日志中看到
-                    r.alert("Github Monitor ERROR: Something went wrong!\n\n"+err, admin_email)
+                    # 打印出来，以便在日志中看到
+                    print("[ERROR] Something went wrong!\n" + err)
+                    r.alert(
+                        "Github Monitor ERROR: Something went wrong!\n\n" + err, admin_email)
                     raise  # 释放异常，强制停止脚本
 
             page_id += 1
 
-        print("[INFO] 结束关键字: "+keyword+"\n\n")
+        print("[INFO] 结束关键字: " + keyword + "\n\n")
 
     def _analysis_result(self, items, keyword):
         '''
@@ -166,7 +175,8 @@ class GithubMonitor:
                 else:
                     negative = True
 
-                url = "https://www.github.com/"+item.repository.full_name+"/blob/master/"+item.path
+                url = "https://www.github.com/" + \
+                    item.repository.full_name + "/blob/master/" + item.path
 
                 update_time = str(int(time.time()))
                 record_result = DB.Record(  # 扔给 Record 处理
@@ -209,12 +219,18 @@ class GithubMonitor:
                     print("timed out")  # timed out 则重复
                     continue
 
+                elif "Server Error" in err:
+                    print("[WARNING] Github Server Error! Just repeat it")
+                    continue
+
                 elif "Unexpected problem" in err:
                     print("[WARNING] Unexpected problem! Just repeat it")
                     continue
 
                 elif "Connection aborted." in err:
-                    print("[WARNING] Remote end closed connection without response! Just repeat it")  # Connection aborted 则重复
+                    # Connection aborted 则重复
+                    print(
+                        "[WARNING] Remote end closed connection without response! Just repeat it")
                     continue
 
                 elif "Not Found" in err:
@@ -245,13 +261,13 @@ class GithubMonitor:
 
 # --------------------- 可能需要修改 ----------------------
 file_url = "./"
-DB = mysqlite.MySqlite(file_url+"github", "leak")
+DB = mysqlite.MySqlite(file_url + "github", "leak")
 # -------------------------------------------------------
 
 # 读取配置
 # 将配置放在单独的 json 文件中
 # 再设置 .gitgnore 防止泄露
-with open(file_url+"config.json", "r") as fp:
+with open(file_url + "config.json", "r") as fp:
     config = json.load(fp)
 
 hosts = config["hosts"]  # 监控的 host
@@ -284,7 +300,7 @@ for keyword in keywords:
             results[keyword].append(result)
             empty = False
         else:
-            results[keyword].append([(None, )*7+("∞",)])
+            results[keyword].append([(None, ) * 7 + ("∞",)])
 
     if empty:  # 不汇报无泄漏的关键字
         results.pop(keyword)
@@ -298,7 +314,7 @@ if send_flag:  # 为 0 时说明 所有关键字都无泄漏
     for email_addr in config["receiver_email"]:
         r.alert(c, email_addr)
 
-    with open(file_url+"result.html", 'w') as fp:
+    with open(file_url + "result.html", 'w') as fp:
         fp.write(c)
 else:
     print("[Info] Nothing to do")
