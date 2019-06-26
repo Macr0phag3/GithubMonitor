@@ -15,8 +15,7 @@
 - pip install jinja2
 
 ### 配置
-只需要修改 `config.json`
-
+- 在项目文件夹下新建一个 `config.json` 文件，按照 `spider.py` 里的注释配置 
 config.json 的示例：
 ```
 {
@@ -41,15 +40,12 @@ config.json 的示例：
 "admin_email":"*********@qq.com"
 }
 ```
+hosts 中，带 `@` 的说明是邮件类型，在代码中会进行特殊处理，详细处理可见代码
 
-hosts 中，带 `@` 的说明是邮件类型，在代码中会进行特殊处理，详细处理见代码
-
-### 运行方式
-- crontab 一个小时一次
-- python spider.py
-- 新建一个 `config.json` 文件，按照 `spider.py` 里的注释配置
 - `spider.py` 中的 `file_url` 可能需要修改
 
+### 运行方式
+- crontab 一个小时运行一次 或者直接 python spider.py
 
 ## 代码主要逻辑
 ![代码主要逻辑](https://github.com/Macr0phag3/GithubMonitor/raw/master/pics/pic2.jpg)
