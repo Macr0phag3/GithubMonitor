@@ -79,3 +79,6 @@ hosts 中，带 `@` 的说明是邮件类型，在代码中会进行特殊处理
 
 **强烈建议需要保密的仓库更改为私有**
 
+## License
+Copyright © 2019 [Macr0phag3](https://github.com/Macr0phag3).
+This project is MIT licensed.
