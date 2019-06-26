@@ -15,8 +15,7 @@
 - pip install jinja2
 
 ### 配置
-- 在项目文件夹下新建一个 `config.json` 文件，按照 `spider.py` 里的注释配置 
-config.json 的示例：
+- 在项目文件夹下新建一个 `config.json` 文件，按照 `spider.py` 里的注释配置。config.json 的示例：
 ```
 {
   "hosts" : [
