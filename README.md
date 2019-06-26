@@ -1,10 +1,21 @@
 # github_monitor
 
-根据关键字与 hosts 生成的关键词，利用 github 提供的 api，监控 git 泄漏。
+## 项目介绍
+由于很多猪队友的存在，公司敏感信息通过 GitHub 泄露出去是很常见的。这个项目主要根据关键字与 hosts 生成的关键词，利用 github 提供的 api，监控 git 泄漏，并在检测到信息泄露的时候发送邮件通知。
 
-有对应的泄漏定级。
+## 特性
+1. 对于泄露有对应的泄漏定级，可作为严重性的参考
+2. 简单却完善：利用 api 获取 GitHub 的搜索结果是最简单高效的方式，加上关键词的限定，保证不超过 GitHub 的 api 限制
+3. 注释比较详细，可以很快地进行定制
+4. 自动组合关键字
 
-**注释很详细**
+## 快速开始
+### 依赖
+- pip install PyGithub
+- pip install jinja2
+
+### 配置
+只需要修改 `config.json`
 
 config.json 的示例：
 ```
@@ -33,11 +44,7 @@ config.json 的示例：
 
 hosts 中，带 `@` 的说明是邮件类型，在代码中会进行特殊处理，详细处理见代码
 
-## 依赖
-- pip install PyGithub
-- pip install jinja2
-
-## 运行方式
+### 运行方式
 - crontab 一个小时一次
 - python spider.py
 - 新建一个 `config.json` 文件，按照 `spider.py` 里的注释配置
