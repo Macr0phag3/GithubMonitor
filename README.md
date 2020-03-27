@@ -85,3 +85,7 @@ hosts 中，带 `@` 的说明是邮件类型，在代码中会进行特殊处理
 Copyright © 2018 [Macr0phag3](https://github.com/Macr0phag3).
 
 This project is MIT licensed.
+
+## Others
+
+[![Stargazers over time](https://starchart.cc/Macr0phag3/GithubMonitor.svg)](https://starchart.cc/Macr0phag3/GithubMonitor)
